@@ -10,6 +10,7 @@ export default (url) => {
 
     const doFetch = (options = {}) => {
         setOptions(options)
+        setIsLoading(true)
     }
     useEffect(() => {
         if (!isLoading) {
@@ -21,12 +22,12 @@ export default (url) => {
                 setResponse(res.data)
                 setIsLoading(false)
             })
-            .catch(error => {
+            .catch(({response}) => {
                 setIsLoading(false)
-                console.log('ERROR', error);
-                setError(error.response.data)
+                console.log('ERROR', response);
+                setError(response.data)
             })
-    })
+    },[isLoading,url,options])
 
     return [{isLoading, response, error}, doFetch]
 }

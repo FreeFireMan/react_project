@@ -8,13 +8,19 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 import {BrowserRouter as Router} from 'react-router-dom'
 import App from './App';
+import {CurrentUserProvider} from "./contexts/currentUser";
+import CurrentUserChecker from "./components/currentUserChecker";
 
 
 
 ReactDOM.render(
-    <Router>
-        <App />
-    </Router>
+    <CurrentUserProvider>
+        <CurrentUserChecker>
+        <Router>
+            <App/>
+        </Router>
+        </CurrentUserChecker>
+    </CurrentUserProvider>
  ,
   document.getElementById('root')
 );
