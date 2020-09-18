@@ -7,7 +7,7 @@ const Feed = ({articles}) => {
         <div>
             {articles.map((article, index) => (
 
-                <div className="card-block">
+                <div className="card-block" key={index}>
                     <div className="card-header">
                         <Link
                             to={`/profiles/${article.author.username}`}>
