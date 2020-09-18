@@ -20,7 +20,6 @@ const Authentication = (props) => {
     const [,setToken] = useLocalStorage('token')
     const [,setCurrentUserState] = useContext(CurrentUserContext)
 
-
     const handleSubmit = (e) => {
         e.preventDefault();
         const user = isLogin ? {email, password} : {email, password, username};
@@ -36,6 +35,7 @@ const Authentication = (props) => {
         if(!response){
             return;
         }
+        setToken(response.user.token);
         setIsSuccessfullSubmit(true)
         setCurrentUserState(state => ({
             ...state,
