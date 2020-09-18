@@ -52,12 +52,7 @@ const TopBar = () =>{
                                     to={`/profiles/${currentUserState.currentUser.username}`}
                                     className='nav-link'>
                                     <img
-                                        style={ {
-                                            verticalAlign: 'middle',
-                                            width: '30px',
-                                            height: '30px',
-                                            borderRadius: '50%'
-                                        }}
+                                        className="avatar"
                                         src={currentUserState.currentUser.image}
                                         alt=""
                                     />

@@ -38,7 +38,7 @@ export default (url) => {
             .catch(({response}) => {
                 setIsLoading(false)
                 console.log('ERROR', response);
-                setError(response.data)
+                setError(response)
             })
     },[isLoading,url,options,token])
 
