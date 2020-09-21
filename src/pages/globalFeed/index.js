@@ -1,16 +1,26 @@
+import {stringify} from "query-string";
 import React, {useEffect, Fragment} from 'react'
 
 import useFetch from "../../hooks/useFetch";
 import Feed from "../../components/feed";
 import Pagination from "../../components/pagination";
+import {getPaginatior, limit} from "../../utils";
+import PopularTags from "../../components/popularTags";
 
-const GlobalFeed = (props) => {
-    const apiUrl = '/articles?limit=10&offset=0'
+const GlobalFeed = ({location,match:{url}}) => {
+
+    const {offset,currentPage} = getPaginatior(location.search);
+    const stringifiedParams = stringify({
+        limit,
+        offset
+    })
+
+    const apiUrl = `/articles?${stringifiedParams}`
     const [{response, isLoading, error}, doFetch] = useFetch(apiUrl)
 
     useEffect(( )=> {
         doFetch()
-    },[doFetch])
+    },[doFetch,currentPage])
 
 
     return (
@@ -28,13 +38,13 @@ const GlobalFeed = (props) => {
                         {!isLoading && response && (
                             <Fragment>
                                 <Feed articles={response.articles} />
-                                <Pagination currentPage={1} limit={10} total={500} url='/'/>
+                                <Pagination currentPage={currentPage} limit={limit} total={500} url={url}/>
                             </Fragment>
                         )}
 
                     </div>
                     <div className='col-md-3'>
-                        popupalr tags
+                        <PopularTags />
                     </div>
 
                 </div>

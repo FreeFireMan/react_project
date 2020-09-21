@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import classNames from 'classnames';
 
 const PaginationItem = ({page, currentPage, url}) =>{
-    console.log(currentPage);
+
     const liClasses = classNames({
     'page-item': true,
     active: currentPage === page,
