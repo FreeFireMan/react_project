@@ -31,7 +31,7 @@ export default (url) => {
         }
         axios(baseUrl + url, requestOptions)
             .then(res => {
-                // console.log('success', res);
+                console.log('success', res);
                 setResponse(res.data)
                 setIsLoading(false)
             })
