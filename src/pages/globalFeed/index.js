@@ -36,7 +36,7 @@ const GlobalFeed = ({location,match:{url}}) => {
             <div className='container page'>
                 <div className='row'>
                     <div className='col-md-9'>
-                        <FeedToggler tagName='foo'/>
+                        <FeedToggler />
                         {isLoading && <Loading/>}
                         {error && <ErrorMessage/>}
                         {!isLoading && response && (
