@@ -16,6 +16,7 @@ export default (url) => {
         setIsLoading(true)
     },[])
 
+
     useEffect(() => {
         const requestOptions = {
             ...options,
@@ -25,6 +26,8 @@ export default (url) => {
                 }
             }
         }
+        console.log('requestOptions');
+        console.log(requestOptions);
 
         if (!isLoading) {
             return
@@ -38,7 +41,12 @@ export default (url) => {
             .catch(({response}) => {
                 setIsLoading(false)
                 console.log('ERROR', response);
-                setError(response)
+
+                setError(
+                    response.data
+                    ? response.data
+                        :response
+                )
             })
     },[isLoading,url,options,token])
 
