@@ -18,8 +18,9 @@ const Authentication = (props) => {
     const [isSuccessfullSubmit, setIsSuccessfullSubmit] = useState(false)
     const [{isLoading, response,error},doFetch] = useFetch(apiUrl)
     const [,setToken] = useLocalStorage('token')
-    const [,setCurrentUserState] = useContext(CurrentUserContext)
-
+    const [currentUser,dispatch] = useContext(CurrentUserContext)
+    console.log("currentUser");
+    console.log(currentUser);
     const handleSubmit = (e) => {
         e.preventDefault();
         const user = isLogin ? {email, password} : {email, password, username};
@@ -37,13 +38,17 @@ const Authentication = (props) => {
         }
         setToken(response.user.token);
         setIsSuccessfullSubmit(true)
-        setCurrentUserState(state => ({
-            ...state,
-            isLoggedIn: true,
-            isLoading: false,
-            currentUser: response.user
-        }));
-    },[response,setToken,setCurrentUserState])
+        // setCurrentUserState(state => ({
+        //     ...state,
+        //     isLoggedIn: true,
+        //     isLoading: false,
+        //     currentUser: response.user
+        // }));
+        dispatch({
+            type: 'SET_AUTHORIZED',
+            payload: response.user
+        })
+    },[response,setToken,dispatch])
     if(isSuccessfullSubmit){
         return <Redirect to='/'/>
     }
