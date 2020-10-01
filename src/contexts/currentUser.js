@@ -26,11 +26,7 @@ const reducer = (state, action) => {
         default:
             return state;
     }
-
 }
-
-
-
 
 export const CurrentUserContext = createContext()
 
