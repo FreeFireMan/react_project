@@ -10,7 +10,7 @@ const ArticleForm = ({onSubmit, errors, initialValue}) => {
         title,
         body,
         description,
-        tagList
+        tagList: tagList.split(' ')
     }
     useEffect(() =>{
         if(!initialValue){
