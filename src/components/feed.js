@@ -26,7 +26,7 @@ const Feed = ({articles}) => {
                     </div>
                     <div className="card" key={index}>
 
-                        <Link to={`/article/${article.slug}`}>
+                        <Link to={`/articles/${article.slug}`}>
                             <h4 className="card-title">
                                 {article.title}
                             </h4>

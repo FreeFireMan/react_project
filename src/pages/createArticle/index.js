@@ -1,9 +1,11 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import ArticleForm from "../../components/articleForm";
 import useFetch from "../../hooks/useFetch";
 import {Redirect} from "react-router-dom";
+import {CurrentUserContext} from "../../contexts/currentUser";
 
 const CreateArticle = () => {
+    const [currentUserState] = useContext(CurrentUserContext)
     const apiUrl = "/articles"
     const [{response, error}, doFetch] = useFetch(apiUrl)
     const [isSuccessSubmit,setIsSuccessSubmit] = useState(false)
@@ -34,6 +36,9 @@ const CreateArticle = () => {
 
     if(isSuccessSubmit){
         return  <Redirect to={`/articles/${response.article.slug}`} />
+    }
+    if(currentUserState.isLoggedIn === false){
+        return <Redirect to='/'/>
     }
 
     return (

@@ -13,7 +13,7 @@ export default ()=>{
         <Switch>
             <Route path="/" component={GlobalFeed} exact />
             <Route path="/articles/new" component={CreateArticle}/>
-            <Route path="/article/:slug" component={Article}/>
+            <Route path="/articles/:slug" component={Article}/>
             <Route path="/feed" component={YourFeed} />
             <Route path="/tags/:slug" component={TagFeed} />
             <Route path="/login" component={Authentication}/>
