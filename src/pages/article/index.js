@@ -44,7 +44,7 @@ const Article = ({match:{params}}) => {
                         <div className='col-xs-12'>
                             <div>
                                 <p>
-                                    {response.body}
+                                    {response.article.body}
                                 </p>
                             </div>
                             <TagList tags={response.article.tagList}/>

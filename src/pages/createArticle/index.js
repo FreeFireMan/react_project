@@ -1,14 +1,47 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import ArticleForm from "../../components/articleForm";
+import useFetch from "../../hooks/useFetch";
+import {Redirect} from "react-router-dom";
 
 const CreateArticle = () => {
-    const errors = {}
-    const initialValue = {}
-    const handleSubmit = (data) => {
-        console.log('handleSubmit',data);
+    const apiUrl = "/articles"
+    const [{response, error}, doFetch] = useFetch(apiUrl)
+    const [isSuccessSubmit,setIsSuccessSubmit] = useState(false)
+    const initialValue = {
+        title:'',
+        description:'',
+        body:'',
+        tagList:[]
+     }
+
+    const handleSubmit = (article) => {
+        console.log('handleSubmit', article);
+        doFetch({
+            method: 'POST',
+            data: {
+                article
+            }
+        })
     }
-    return(
-        <ArticleForm errors={errors} initialValue={initialValue} onSubmit={handleSubmit}/>
+
+    useEffect(() =>{
+        if(!response){
+            return
+        }
+        setIsSuccessSubmit(true)
+
+    },[response])
+
+    if(isSuccessSubmit){
+        return  <Redirect to={`/articles/${response.article.slug}`} />
+    }
+
+    return (
+        <ArticleForm
+            errors={(error && error.errors) || {}}
+            initialValue={initialValue}
+            onSubmit={handleSubmit}
+        />
     )
 }
 
