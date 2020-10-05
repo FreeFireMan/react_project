@@ -1,15 +1,26 @@
 
-import React, {useEffect} from 'react'
+import React, {useContext, useEffect} from 'react'
 import useFetch from "../../hooks/useFetch";
 import {Link} from "react-router-dom";
 import Loading from "../../components/loading";
 import ErrorMessage from "../../components/errorMessage";
 import TagList from "../../components/tagList";
+import {CurrentUserContext} from "../../contexts/currentUser";
 
 const Article = ({match:{params}}) => {
-
     const apiUrl = `/articles/${params.slug}`;
+
     const [{error, response,isLoading},doFetch] = useFetch(apiUrl)
+    const [currentUserState] = useContext(CurrentUserContext)
+
+    const isAuthor = () =>{
+        if(!response || !currentUserState.isLoggedIn){
+            return false
+        }
+        return (response.article.author.username === currentUserState.currentUser.username)
+    }
+    console.log(isAuthor());
+
     useEffect(() => {
         doFetch()
     },[doFetch])
@@ -30,6 +41,13 @@ const Article = ({match:{params}}) => {
                                 </Link>
                                 <span className='data'>{response.article.createdAt}</span>
                             </div>
+                            {
+                                isAuthor() &&(
+                                    <span>
+                                        <Link className='btn btn-outline-secondary btn-sm' to={`/articles/${response.article.slug}/edit`}>EDIT</Link>
+                                    </span>
+                                )
+                            }
                         </div>
                     </div>
                 )}
