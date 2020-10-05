@@ -7,19 +7,15 @@ import {CurrentUserContext} from "../../contexts/currentUser";
 const EditArticle = ({match}) => {
     const {slug} = match.params
     const [currentUserState] = useContext(CurrentUserContext)
-    const apiUrl = "/articles"
-    const [{response, error}, doFetch] = useFetch(apiUrl)
-    const [isSuccessSubmit, setIsSuccessSubmit] = useState(false)
-    const initialValue = {
-        title: '',
-        description: '',
-        body: '',
-        tagList: []
-    }
+    const apiUrl = `/articles/${slug}`
+    const [{response: doGetResponse, error: doGeterror}, doGetFetch] = useFetch(apiUrl)
+    const [{response: doPutResponse, error: doPuterror}, doPutFetch] = useFetch(apiUrl)
+    const [initialValue, setInitialValue] = useState(null)
+
 
     const handleSubmit = (article) => {
         doFetch({
-            method: 'POST',
+            method: 'PUT',
             data: {
                 article
             }
@@ -27,25 +23,17 @@ const EditArticle = ({match}) => {
     }
 
     useEffect(() => {
-        if (!response) {
-            return
-        }
-        setIsSuccessSubmit(true)
 
-    }, [response])
 
-    if (isSuccessSubmit) {
-        return <Redirect to={`/articles/${response.article.slug}`}/>
-    }
-    if (currentUserState.isLoggedIn === false) {
-        return <Redirect to='/'/>
-    }
+    }, )
+
+
 
     return (
         <ArticleForm
-            // errors={(error && error.errors) || {}}
-            // initialValue={initialValue}
-            // onSubmit={handleSubmit}
+            errors={(error && error.errors) || {}}
+            initialValue={initialValue}
+            onSubmit={handleSubmit}
         />
     )
 }
