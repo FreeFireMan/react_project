@@ -1,9 +1,8 @@
+
 import React from "react";
 
-
 const TagList = ({tags}) => {
-    console.log("tags");
-    console.log(tags);
+
     return (
         <ul className='col-md-6'>
             {tags.map(tag =>
@@ -17,8 +16,6 @@ const TagList = ({tags}) => {
                 )
             )}
         </ul>
-
     )
 }
-
 export default TagList

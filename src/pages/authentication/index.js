@@ -1,3 +1,4 @@
+
 import React, {useState, useEffect, useContext} from 'react'
 import {Link, Redirect } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
@@ -5,8 +6,8 @@ import useLocalStorage from "../../hooks/useLocalStorage";
 import {CurrentUserContext} from '../../contexts/currentUser'
 import BackendErrorMessage from "../../components/backendErrorMessage";
 
-
 const Authentication = (props) => {
+
     const isLogin = props.match.path === '/login'
     const pageTitle = isLogin ? 'Sing In' : 'Sing Up'
     const descriptionLink = isLogin ? '/register' : '/login'
@@ -19,12 +20,10 @@ const Authentication = (props) => {
     const [{isLoading, response,error},doFetch] = useFetch(apiUrl)
     const [,setToken] = useLocalStorage('token')
     const [currentUser,dispatch] = useContext(CurrentUserContext)
-    console.log("currentUser");
-    console.log(currentUser);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const user = isLogin ? {email, password} : {email, password, username};
-        // console.log(user);
         doFetch({
             method: 'post',
             data: {
@@ -32,26 +31,23 @@ const Authentication = (props) => {
             }
         })
     }
+
     useEffect(()=>{
         if(!response){
             return;
         }
         setToken(response.user.token);
         setIsSuccessfullSubmit(true)
-        // setCurrentUserState(state => ({
-        //     ...state,
-        //     isLoggedIn: true,
-        //     isLoading: false,
-        //     currentUser: response.user
-        // }));
         dispatch({
             type: 'SET_AUTHORIZED',
             payload: response.user
         })
     },[response,setToken,dispatch])
+
     if(isSuccessfullSubmit){
         return <Redirect to='/'/>
     }
+
     return (
         <div className="auth-page">
             <div className='container'>
@@ -114,5 +110,4 @@ const Authentication = (props) => {
         </div>
     )
 }
-
 export default Authentication

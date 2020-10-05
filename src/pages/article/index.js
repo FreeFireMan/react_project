@@ -1,20 +1,18 @@
-import React, {useEffect} from 'react'
 
+import React, {useEffect} from 'react'
 import useFetch from "../../hooks/useFetch";
 import {Link} from "react-router-dom";
 import Loading from "../../components/loading";
 import ErrorMessage from "../../components/errorMessage";
 import TagList from "../../components/tagList";
+
 const Article = ({match:{params}}) => {
-    console.log(params.slug);
+
     const apiUrl = `/articles/${params.slug}`;
     const [{error, response,isLoading},doFetch] = useFetch(apiUrl)
     useEffect(() => {
         doFetch()
     },[doFetch])
-    console.log('response',response);
-    console.log('error',error);
-
 
     return (
         <div className="article-page">
@@ -55,5 +53,4 @@ const Article = ({match:{params}}) => {
         </div>
     )
 }
-
 export default Article

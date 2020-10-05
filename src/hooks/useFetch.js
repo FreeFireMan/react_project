@@ -26,22 +26,20 @@ export default (url) => {
                 }
             }
         }
-        console.log('requestOptions');
-        console.log(requestOptions);
+        // console.log('requestOptions',requestOptions);
 
         if (!isLoading) {
             return
         }
         axios(baseUrl + url, requestOptions)
             .then(res => {
-                console.log('success', res);
+                // console.log('success', res);
                 setResponse(res.data)
                 setIsLoading(false)
             })
             .catch(({response}) => {
                 setIsLoading(false)
-                console.log('ERROR', response);
-
+                // console.log('ERROR', response);
                 setError(
                     response.data
                     ? response.data
