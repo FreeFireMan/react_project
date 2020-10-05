@@ -1,6 +1,7 @@
 import {useEffect, useState, useCallback} from "react";
 import axios from "axios";
 import useLocalStorage from "./useLocalStorage";
+import  './../intercept'
 
 export default (url) => {
     const baseUrl = 'https://conduit.productionready.io/api'
@@ -26,26 +27,47 @@ export default (url) => {
                 }
             }
         }
-        // console.log('requestOptions',requestOptions);
+         console.log('requestOptions',requestOptions);
 
         if (!isLoading) {
             return
         }
-        axios(baseUrl + url, requestOptions)
+
+        // axios(baseUrl + url, requestOptions)
+        //     .then(res => {
+        //          console.log('success', res);
+        //         setResponse(res.data)
+        //         setIsLoading(false)
+        //     })
+        //     .catch(({response}) => {
+        //         setIsLoading(false)
+        //          console.log('ERROR', response);
+        //         setError(
+        //             response.data
+        //             ? response.data
+        //                 :response
+        //         )
+        //     })
+
+        fetch(baseUrl + url, requestOptions)
+            .then(response => {
+                return response.json()
+            })
             .then(res => {
-                // console.log('success', res);
-                setResponse(res.data)
+                console.log('success', res);
+                setResponse(res)
                 setIsLoading(false)
             })
             .catch(({response}) => {
                 setIsLoading(false)
-                // console.log('ERROR', response);
+                console.log('ERROR', response);
                 setError(
                     response.data
-                    ? response.data
+                        ? response.data
                         :response
                 )
             })
+
     },[isLoading,url,options,token])
 
     return [{isLoading, response, error}, doFetch]

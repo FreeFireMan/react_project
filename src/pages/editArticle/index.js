@@ -7,45 +7,41 @@ import {CurrentUserContext} from "../../contexts/currentUser";
 const EditArticle = ({match}) => {
     const {slug} = match.params
     const [currentUserState] = useContext(CurrentUserContext)
-    const apiUrl = "/articles"
-    const [{response, error}, doFetch] = useFetch(apiUrl)
-    const [isSuccessSubmit, setIsSuccessSubmit] = useState(false)
-    const initialValue = {
-        title: '',
-        description: '',
-        body: '',
-        tagList: []
-    }
+    const apiUrl = `/articles/${slug}`
+    const [{response: fetchArticleResponse,error: fetchError},doFetchArticle] = useFetch(apiUrl)
+    const [{response: updateArticleResponse,updateError},doUpdateArticle] = useFetch(apiUrl)
+    const [initialValue, setInitialValue] = useState(null)
 
     const handleSubmit = (article) => {
-        doFetch({
-            method: 'POST',
+        doUpdateArticle({
+            method: "PUT",
             data: {
                 article
             }
         })
     }
 
-    useEffect(() => {
-        if (!response) {
+    useEffect( doFetchArticle, [doFetchArticle])
+    useEffect(() =>{
+        if(!fetchArticleResponse){
             return
         }
-        setIsSuccessSubmit(true)
+        const {article} = fetchArticleResponse
+        setInitialValue({
+            title: article.title,
+            body: article.body,
+            tagList: article.tagList,
+            description : article.description,
+        })
+    },[fetchArticleResponse] )
 
-    }, [response])
-
-    if (isSuccessSubmit) {
-        return <Redirect to={`/articles/${response.article.slug}`}/>
-    }
-    if (currentUserState.isLoggedIn === false) {
-        return <Redirect to='/'/>
-    }
+    console.log(updateError);
 
     return (
         <ArticleForm
-            // errors={(error && error.errors) || {}}
-            // initialValue={initialValue}
-            // onSubmit={handleSubmit}
+            errors={(updateError && updateError.errors) || {}}
+            initialValue={initialValue}
+            onSubmit={handleSubmit}
         />
     )
 }

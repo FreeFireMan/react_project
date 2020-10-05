@@ -10,6 +10,8 @@ import {BrowserRouter as Router} from 'react-router-dom'
 import App from './App';
 import {CurrentUserProvider} from "./contexts/currentUser";
 import CurrentUserChecker from "./components/currentUserChecker";
+import  './intercept'
+
 
 
 
