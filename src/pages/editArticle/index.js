@@ -24,6 +24,7 @@ const EditArticle = ({match}) => {
     }
 
     useEffect(doGetFetch,[doGetFetch] )
+
     useEffect(()=>{
         if(!doGetResponse){
             return

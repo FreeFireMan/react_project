@@ -1,34 +1,51 @@
-
-import React, {useContext, useEffect} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import useFetch from "../../hooks/useFetch";
-import {Link} from "react-router-dom";
+import {Link,Redirect} from "react-router-dom";
 import Loading from "../../components/loading";
 import ErrorMessage from "../../components/errorMessage";
 import TagList from "../../components/tagList";
 import {CurrentUserContext} from "../../contexts/currentUser";
 
-const Article = ({match:{params}}) => {
+const Article = ({match: {params}}) => {
     const apiUrl = `/articles/${params.slug}`;
 
-    const [{error, response,isLoading},doFetch] = useFetch(apiUrl)
+    const [{error, response, isLoading}, doFetch] = useFetch(apiUrl)
+    const [{response: deleteArticleResponse}, doDeleteArticle] = useFetch(apiUrl)
     const [currentUserState] = useContext(CurrentUserContext)
+    const [isSuccessDelete, setIsSuccessDelete] = useState(false)
 
-    const isAuthor = () =>{
-        if(!response || !currentUserState.isLoggedIn){
+    const isAuthor = () => {
+        if (!response || !currentUserState.isLoggedIn) {
             return false
         }
         return (response.article.author.username === currentUserState.currentUser.username)
     }
-    console.log(isAuthor());
 
     useEffect(() => {
         doFetch()
-    },[doFetch])
+    }, [doFetch])
+
+    const deleteArticle = ()=>{
+        doDeleteArticle({
+            method: 'DELETE'
+        })
+
+    }
+    useEffect(()=>{
+        if(!deleteArticleResponse){
+            return
+        }
+        setIsSuccessDelete(true)
+    },[deleteArticleResponse])
+
+    if(isSuccessDelete){
+        return <Redirect to={'/'}/>
+    }
 
     return (
         <div className="article-page">
             <div className='banner'>
-                {response &&(
+                {response && (
                     <div className='article-container'>
                         <h1>{response.article.title}</h1>
                         <div className='article-meta'>
@@ -42,9 +59,18 @@ const Article = ({match:{params}}) => {
                                 <span className='data'>{response.article.createdAt}</span>
                             </div>
                             {
-                                isAuthor() &&(
+                                isAuthor() && (
                                     <span>
-                                        <Link className='btn btn-outline-secondary btn-sm' to={`/articles/${response.article.slug}/edit`}>EDIT</Link>
+                                        <Link className='btn btn-outline-secondary btn-sm'
+                                              to={`/articles/${response.article.slug}/edit`}>
+                                            EDIT
+                                        </Link>
+                                        <button
+                                            className='btn btn-outline-danger btn-sm'
+                                            onClick={deleteArticle}
+                                        >
+                                            DELETE
+                                        </button>
                                     </span>
                                 )
                             }
@@ -53,7 +79,7 @@ const Article = ({match:{params}}) => {
                 )}
             </div>
             <div className='container page'>
-                {isLoading && <Loading />}
+                {isLoading && <Loading/>}
                 {error && <ErrorMessage/>}
                 {!isLoading && response && (
                     <div className='row article-content'>
