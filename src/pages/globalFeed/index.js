@@ -24,6 +24,7 @@ const GlobalFeed = ({location,match:{url}}) => {
     useEffect(( )=> {
         doFetch()
     },[doFetch,currentPage])
+    console.log('globalfeed');
 
 
     return (

@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import TagList from "./tagList";
+import AddToFavorites from "./addToFavorites";
 
 const Feed = ({articles}) => {
 
@@ -11,7 +12,7 @@ const Feed = ({articles}) => {
             {articles.map((article, index) => (
 
                 <div className="card-block" key={index}>
-                    <div className="card-header">
+                    <div className="card-header container">
                         <Link
                             to={`/profiles/${article.author.username}`}>
                             <img
@@ -25,13 +26,18 @@ const Feed = ({articles}) => {
                             to={`/profiles/${article.author.username}`}>
                             {article.author.username}
                         </Link>
-                    </div>
-                    <div className="card" key={index}>
 
+                    </div>
+
+                    <div className="card" >
+                        <div className="text-right">
+                            <AddToFavorites/>
+                        </div>
                         <Link to={`/articles/${article.slug}`}>
                             <h4 className="card-title">
                                 {article.title}
                             </h4>
+
                             <h6 className="card-subtitle mb-2 text-muted">{article.createdAt}</h6>
                             <p className="card-text">
                                 {article.description}
