@@ -3,13 +3,17 @@ import React, {useContext, useEffect, useState} from 'react'
 import useFetch from "../../hooks/useFetch";
 import {CurrentUserContext} from "../../contexts/currentUser";
 import BackendErrorMessage from "../../components/backendErrorMessage";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import {Redirect} from "react-router-dom";
 
 const Settings = ()=>{
+    const [,setToken] = useLocalStorage('token');
     const [currentUserState,dispatch] = useContext(CurrentUserContext)
     const apiUrl = '/user'
     const [{response,error}, doFetch] = useFetch(apiUrl)
     const [image,setImage] = useState('');
     const [username,setUserName] = useState('');
+    const [isSuccessFullLogout,setIsSuccessFullLogout] = useState(false);
     const [bio,setBio] = useState('');
     const [email,setEmail] = useState('');
     const [password,setPassword] = useState('');
@@ -21,17 +25,23 @@ const Settings = ()=>{
         doFetch({
             method: 'PUT',
             data:{
-                ...currentUserState.currentUser,
-                image,
-                username,
-                bio,
-                email,
-                password,
+               user:{
+                   ...currentUserState.currentUser,
+                   image,
+                   username,
+                   bio,
+                   email,
+                   password,
+               }
             }
         })
     }
 
-    function logout() {
+    function logout(event) {
+        event.preventDefault()
+        setToken('')
+        dispatch({type:'LOGOUT'})
+        setIsSuccessFullLogout(true)
 
     }
     useEffect(()=>{
@@ -52,6 +62,10 @@ const Settings = ()=>{
         }
         dispatch({type:'SET_AUTHORIZED',payload:response.user})
     },[response, dispatch])
+
+    if(isSuccessFullLogout){
+        return <Redirect to="/"/>
+    }
 
     return(
         <div className="settings-page">
@@ -102,7 +116,7 @@ const Settings = ()=>{
                                     <input
                                         type="password"
                                         className='form-control form-control-lg'
-                                        placeholder='Password'
+                                        placeholder='NEW Password'
                                         value={password}
                                         onChange={e => setPassword(e.target.value)}
                                     />
