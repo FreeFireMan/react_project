@@ -27,7 +27,7 @@ export default (url) => {
                 }
             }
         }
-         console.log('requestOptions',requestOptions);
+         // console.log('requestOptions',requestOptions);
 
         if (!isLoading) {
             return
@@ -54,13 +54,13 @@ export default (url) => {
                 return response.json()
             })
             .then(res => {
-                console.log('success', res);
+                // console.log('success', res);
                 setResponse(res)
                 setIsLoading(false)
             })
             .catch(({response}) => {
                 setIsLoading(false)
-                console.log('ERROR', response);
+                // console.log('ERROR', response);
                 setError(
                     response.data
                         ? response.data
