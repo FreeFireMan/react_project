@@ -31,7 +31,7 @@ const Feed = ({articles}) => {
 
                     <div className="card" >
                         <div className="text-right">
-                            <AddToFavorites/>
+                            <AddToFavorites isFavorited={article.favorited} favoritedCount={article.favoritesCount} articleSlug={article.slug}/>
                         </div>
                         <Link to={`/articles/${article.slug}`}>
                             <h4 className="card-title">
