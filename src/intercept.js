@@ -16,6 +16,9 @@ export const unregister = fetchIntercept.register({
     response: function (response) {
         console.log('response fetchIntercept');
         // Modify the reponse object
+         if(response.status === 401){
+            window.location.href = '/login';
+         }
         return response;
     },
 

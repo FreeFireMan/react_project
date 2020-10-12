@@ -49,7 +49,7 @@ const TagFeed = ({location,match:{url,params}}) => {
 
                     </div>
                     <div className='col-md-3'>
-                        <PopularTags />
+                        {/*<PopularTags />*/}
                     </div>
 
                 </div>

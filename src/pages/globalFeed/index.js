@@ -48,7 +48,7 @@ const GlobalFeed = ({location,match:{url}}) => {
 
                     </div>
                     <div className='col-md-3'>
-                        <PopularTags />
+                        {/*<PopularTags />*/}
                     </div>
 
                 </div>

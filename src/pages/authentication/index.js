@@ -10,9 +10,9 @@ const Authentication = (props) => {
 
     const isLogin = props.match.path === '/login'
     const pageTitle = isLogin ? 'Sing In' : 'Sing Up'
-    const descriptionLink = isLogin ? '/register' : '/login'
+    const descriptionLink = isLogin ? '/signup' : '/login'
     const descriptionText = isLogin ? 'Need an account?' : 'Have an account?'
-    const apiUrl = isLogin ? '/users/login' : '/users'
+    const apiUrl = !isLogin ? '/signup' : '/token/'
     const [email, setEmail] = useState('')
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -23,12 +23,13 @@ const Authentication = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const user = isLogin ? {email, password} : {email, password, username};
+        const user = isLogin ? {username, password} : {email, password, username, profile: {phone: "+380978065905"}};
+        const body = JSON.stringify(user)
+        console.log('user');
+        console.log(body);
         doFetch({
             method: 'post',
-            data: {
-                user
-            }
+            body
         })
     }
 
@@ -36,17 +37,22 @@ const Authentication = (props) => {
         if(!response){
             return;
         }
-        setToken(response.user.token);
-        setIsSuccessfullSubmit(true)
-        dispatch({
-            type: 'SET_AUTHORIZED',
-            payload: response.user
-        })
+        if(response.hasOwnProperty('refresh')){
+            setToken(JSON.stringify(response));
+            setIsSuccessfullSubmit(true)
+            // dispatch({
+            //     type: 'SET_AUTHORIZED',
+            //     payload: response.user
+            // })
+        }
     },[response,setToken,dispatch])
 
     if(isSuccessfullSubmit){
         return <Redirect to='/'/>
     }
+
+    console.log('error authentication');
+    console.log(error);
 
     return (
         <div className="auth-page">
@@ -58,32 +64,34 @@ const Authentication = (props) => {
                             <Link to={descriptionLink}>{descriptionText}</Link>
                         </p>
                         <form onSubmit={handleSubmit}>
-                            {error && <BackendErrorMessage backendError={error.errors} />}
+                            {error && <BackendErrorMessage backendError={error} />}
                             <fieldset>
                                 {!isLogin && (
-                                        <fieldset className="form-group">
-                                            <input
+                                    <fieldset className="form-group">
+                                        <input
+                                            name='email'
+                                            type='email'
+                                            className="form-control form-control-lg"
+                                            placeholder="Email"
+                                            value={email}
+                                            onChange={e => setEmail(e.target.value)}
 
-                                                type='text'
-                                                className="form-control form-control-lg"
-                                                placeholder="Username"
-                                                value={username}
-                                                onChange={e => setUsername(e.target.value)}
+                                        />
+                                    </fieldset>
 
-                                            />
-                                        </fieldset>
                                         )}
                                 <fieldset className="form-group">
                                     <input
-                                        name='email'
-                                        type='email'
+
+                                        type='text'
                                         className="form-control form-control-lg"
-                                        placeholder="Email"
-                                        value={email}
-                                        onChange={e => setEmail(e.target.value)}
+                                        placeholder="Username"
+                                        value={username}
+                                        onChange={e => setUsername(e.target.value)}
 
                                     />
                                 </fieldset>
+
                                 <fieldset className="form-group">
                                     <input
                                         type='password'

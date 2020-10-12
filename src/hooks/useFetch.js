@@ -1,10 +1,10 @@
 import {useEffect, useState, useCallback} from "react";
 import axios from "axios";
 import useLocalStorage from "./useLocalStorage";
-import  './../intercept'
+// import  './../intercept'
 
 export default (url) => {
-    const baseUrl = 'https://conduit.productionready.io/api'
+    const baseUrl = 'http://127.0.0.1:8000'
     const [isLoading, setIsLoading] =  useState(false)
     const [response, setResponse] = useState(null)
     const [error, setError] = useState(null)
@@ -23,7 +23,8 @@ export default (url) => {
             ...options,
             ...{
                 headers: {
-                    authorization: token ? `Token ${token}` : ''
+                    authorization: token ? `Token ${token}` : '',
+                    'Content-Type': 'application/json'
                 }
             }
         }
@@ -48,24 +49,32 @@ export default (url) => {
         //                 :response
         //         )
         //     })
+        console.log("requestOptions");
+        console.log(requestOptions);
 
         fetch(baseUrl + url, requestOptions)
             .then(response => {
-                return response.json()
+                if( ![400, 415].includes(response.status)){
+                    return response.json()
+                }else{
+
+                    setIsLoading(false)
+                    response.json().then( res=>{
+                        console.log('ERROR', res);
+                        setError(res)
+                        }
+                    )
+                }
             })
             .then(res => {
-                // console.log('success', res);
+                 console.log('success', res);
                 setResponse(res)
                 setIsLoading(false)
             })
-            .catch(({response}) => {
+            .catch((response) => {
                 setIsLoading(false)
-                // console.log('ERROR', response);
-                setError(
-                    response.data
-                        ? response.data
-                        :response
-                )
+                 console.log('fetch_ERROR', response);
+                setError(response)
             })
 
     },[isLoading,url,options,token])
