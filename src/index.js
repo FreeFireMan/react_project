@@ -6,7 +6,7 @@ import $ from 'jquery';
 import Popper from 'popper.js';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 
-import {BrowserRouter as Router} from 'react-router-dom'
+import {HashRouter as Router} from 'react-router-dom'
 import App from './App';
 import {CurrentUserProvider} from "./contexts/currentUser";
 import CurrentUserChecker from "./components/currentUserChecker";
