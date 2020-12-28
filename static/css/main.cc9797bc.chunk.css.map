@@ -1,0 +1,1 @@
+{"version":3,"sources":["app.css"],"names":[],"mappings":"AAAA,QACI,qBAAsB,CACtB,UAAW,CACX,WAAY,CACZ,iBACJ","file":"main.cc9797bc.chunk.css","sourcesContent":[".avatar {\n    vertical-align: middle;\n    width: 35px;\n    height: 35px;\n    border-radius: 50%;\n}\n"]}
